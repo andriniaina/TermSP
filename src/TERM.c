@@ -219,6 +219,12 @@ void renderCell(TERM_State *state, int x, int y) {
         color.g = ~color.g;
         color.b = ~color.b;
         SDL_RenderFillRect(state->renderer, &rect);
+    } else {
+        SDL_Color color = {cell.bg.rgb.red, cell.bg.rgb.green, cell.bg.rgb.blue, 255};
+        SDL_Rect rect = {cursor.x, cursor.y + 4, state->font.metrics->max_advance,
+                         state->font.metrics->height};
+        SDL_SetRenderDrawColor(state->renderer, color.r, color.g, color.b, color.a);
+        SDL_RenderFillRect(state->renderer, &rect);
     }
 
     if (cell.attrs.bold) font = state->font.bold;
