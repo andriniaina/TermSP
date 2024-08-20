@@ -210,20 +210,19 @@ void renderCell(TERM_State *state, int x, int y) {
 
     vterm_state_convert_color_to_rgb(state->termstate, &cell.fg);
     vterm_state_convert_color_to_rgb(state->termstate, &cell.bg);
-    SDL_Color color = {cell.fg.rgb.red, cell.fg.rgb.green, cell.fg.rgb.blue, 255};
+    SDL_Color fg;
+    SDL_Color bg;
     if (cell.attrs.reverse) {
-        SDL_Rect rect = {cursor.x, cursor.y + 4, state->font.metrics->max_advance,
-                         state->font.metrics->height};
-        SDL_SetRenderDrawColor(state->renderer, color.r, color.g, color.b, color.a);
-        color.r = ~color.r;
-        color.g = ~color.g;
-        color.b = ~color.b;
-        SDL_RenderFillRect(state->renderer, &rect);
+        fg = (SDL_Color){cell.bg.rgb.red, cell.bg.rgb.green, cell.bg.rgb.blue, 255};
+        bg = (SDL_Color){cell.fg.rgb.red, cell.fg.rgb.green, cell.fg.rgb.blue, 255};
     } else {
-        SDL_Color color = {cell.bg.rgb.red, cell.bg.rgb.green, cell.bg.rgb.blue, 255};
+        fg = (SDL_Color){cell.fg.rgb.red, cell.fg.rgb.green, cell.fg.rgb.blue, 255};
+        bg = (SDL_Color){cell.bg.rgb.red, cell.bg.rgb.green, cell.bg.rgb.blue, 255};
+    }
+    if (bg.r + bg.g + bg.b != 765) {
         SDL_Rect rect = {cursor.x, cursor.y + 4, state->font.metrics->max_advance,
                          state->font.metrics->height};
-        SDL_SetRenderDrawColor(state->renderer, color.r, color.g, color.b, color.a);
+        SDL_SetRenderDrawColor(state->renderer, bg.r, bg.g, bg.b, bg.a);
         SDL_RenderFillRect(state->renderer, &rect);
     }
 
@@ -231,7 +230,7 @@ void renderCell(TERM_State *state, int x, int y) {
     else if (cell.attrs.italic)
         ;
 
-    SDL_SetRenderDrawColor(state->renderer, color.r, color.g, color.b, color.a);
+    SDL_SetRenderDrawColor(state->renderer, fg.r, fg.g, fg.b, fg.a);
     FOX_RenderChar(font, ch, 0, &cursor);
 }
 
