@@ -209,7 +209,11 @@ int handleJoyButtons(TERM_State *state, SDL_Event *ev) {
             }
             break;
 
-        case SDL_JOYBUTTONUP: KEYB_Shift(0); break;
+        case SDL_JOYBUTTONUP:
+            switch (ev->jbutton.button) {
+                case 4: KEYB_Shift(0); break;
+            }
+            break;
     }
     return 0;
 }

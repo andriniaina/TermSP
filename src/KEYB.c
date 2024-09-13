@@ -135,8 +135,11 @@ void KEYB_ClickKey() {
     if (mod_state & KMOD_CTRL) {
         if (key >= 64 && key < 64 + 32) KEYB_SimulateKey(key - 64, STATE_DOWN);
         else if (key >= 97 && key < 97 + 31) KEYB_SimulateKey(key - 96, STATE_DOWN);
-    } else if (mod_state & KMOD_SHIFT && key >= SDLK_a && key <= SDLK_z) {
+    } else if ((mod_state & KMOD_SHIFT || mod_state & KMOD_CAPS) &&
+               (key >= SDLK_a && key <= SDLK_z)) {
         KEYB_SimulateKey(key - SDLK_a + 'A', STATE_TYPED);
+    } else if (key == SDLK_CAPSLOCK) {
+        KEYB_ToggleMod();
     } else {
         KEYB_SimulateKey(key, STATE_TYPED);
     }
@@ -146,17 +149,17 @@ void KEYB_Toggle() { active = !active; }
 void KEYB_SwitchLocation() { location = !location; }
 
 void KEYB_Shift(int state) {
-                    shifted       = state;
-                    toggled[4][0] = state;
-                    KEYB_UpdateModstate(SDLK_LSHIFT, state ? STATE_DOWN : STATE_UP);
+    shifted       = state;
+    toggled[4][0] = state;
+    KEYB_UpdateModstate(SDLK_LSHIFT, state ? STATE_DOWN : STATE_UP);
 }
 void KEYB_ToggleMod() {
-                    toggled[selected_j][selected_i] = 1 - toggled[selected_j][selected_i];
-                    if (toggled[selected_j][selected_i])
-                        KEYB_SimulateKey(keys[shifted][selected_j][selected_i], STATE_DOWN);
-                    else KEYB_SimulateKey(keys[shifted][selected_j][selected_i], STATE_UP);
-                    if (selected_j == 4 && (selected_i == 0 || selected_i == 11))
-                        shifted = toggled[selected_j][selected_i];
+    toggled[selected_j][selected_i] = 1 - toggled[selected_j][selected_i];
+    KEYB_SimulateKey(keys[shifted][selected_j][selected_i], 1 + toggled[selected_j][selected_i]);
+    KEYB_UpdateModstate(keys[shifted][selected_j][selected_i],
+                        1 + toggled[selected_j][selected_i]);
+    if (selected_j == 4 && (selected_i == 0 || selected_i == 11))
+        shifted = toggled[selected_j][selected_i];
 }
 
 void KEYB_UpdateModstate(int key, int state) {

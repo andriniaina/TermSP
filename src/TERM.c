@@ -1,4 +1,7 @@
 #include "TERM.h"
+#include <fcntl.h>
+#include <termios.h>
+#include <unistd.h>
 
 static VTermScreenCallbacks callbacks = {
     .movecursor = moveCursor, .sb_pushline = sb_pushline, .bell = bell, .damage = damage};
@@ -12,7 +15,6 @@ int childState = 0;
 
 int TERM_Init(TERM_State *state, TERM_Config *cfg) {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK)) return -1;
     if (FOX_Init() != FOX_INITIALIZED) return -1;
 
@@ -67,12 +69,28 @@ int TERM_Init(TERM_State *state, TERM_Config *cfg) {
 
     state->cfg = *cfg;
 
-    state->child = forkpty(&state->childfd, NULL, NULL, NULL);
+    char slave_name[128];
+    state->child = forkpty(&state->childfd, slave_name, NULL, NULL);
+
+
     if (state->child < 0) return -1;
     else if (state->child == 0) {
         setenv("PS1", "\\[\\033[32m\\]\\w\\[\\033[00m\\]\\$ ", 1);
         updateLibPath("/mnt/SDCARD/Apps/Terminal/lib");
 
+        int slave_fd = open(slave_name, O_RDWR);
+        struct termios terminal_attr;
+        if (tcgetattr(slave_fd, &terminal_attr) == -1) {
+          perror("tcgetattr");
+          exit(EXIT_FAILURE);
+        }
+        terminal_attr.c_cc[VERASE] = 0x08;
+        if (tcsetattr(slave_fd, TCSANOW, &terminal_attr) == -1) {
+          perror("tcsetattr");
+          close(slave_fd);
+          exit(EXIT_FAILURE);
+        }
+        close(slave_fd);
         char *env_shell = getenv("SHELL");
         if (env_shell == NULL) env_shell = "/bin/sh";
         char **args = cfg->args ? cfg->args : (char *[]){env_shell, "-i", NULL};
