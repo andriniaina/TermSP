@@ -49,8 +49,8 @@ static int shifted      = 0;
 static int mod_state    = 0;
 static int total_length = 40;
 
-int KEYB_Init(TERM_State *state, TERM_Config *cfg);
-void KEYB_RenderVirtualKeyboard(TERM_State *state);
+int KEYB_Init();
+void KEYB_RenderVirtualKeyboard();
 
 int KEYB_MoveCursor(int dx, int dy);
 void KEYB_ClickKey();

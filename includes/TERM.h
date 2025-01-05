@@ -1,10 +1,10 @@
 #pragma once
 #include "TermSP.h"
 
-int  TERM_Init(TERM_State *state, TERM_Config *cfg);
-void TERM_Resize(TERM_State *state, int width, int height);
-void TERM_Update(TERM_State *state);
-void TERM_DeinitializeTerminal(TERM_State *state);
+int  TERM_Init();
+void TERM_Resize(int width, int height);
+void TERM_Update();
+void TERM_DeinitializeTerminal();
 
 void signalHandler(int signum);
 
@@ -16,6 +16,6 @@ int bell(void *user);
 int sb_pushline(int cols, const VTermScreenCell *cells, void *user);
 int sb_popline(int cols, VTermScreenCell *cells, void *user);
 
-void renderCell(TERM_State *state, int x, int y);
-void renderScreen(TERM_State *state);
+void renderCell(int x, int y);
+void renderScreen();
 void updateLibPath(const char *new_path);

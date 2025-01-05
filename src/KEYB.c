@@ -1,6 +1,6 @@
 #include "KEYB.h"
 
-static char *syms[2][NUM_ROWS][NUM_KEYS] = {
+static char *syms[2][6][18] = {
     {{"Esc", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", NULL},
      {"` ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "Bsp", "Ins", "Del", " ^ ",
       NULL},
@@ -44,62 +44,62 @@ char *help =
     "  mv <f> <d>      move files (dest can be dir)\n"
     "  rm <f>          remove files (use -rf for dir)\n\n";
 
-int KEYB_Init(TERM_State *state, TERM_Config *cfg) {
-    for (int j = 0; j < NUM_ROWS; j++)
-        for (int i = 0; i < NUM_KEYS; i++) toggled[j][i] = 0;
-    active = cfg->virtkb ? 1 : 0;
+int KEYB_Init() {
+    for (int j = 0; j < 6; j++)
+        for (int i = 0; i < 18; i++) toggled[j][i] = 0;
+    active = cfg.virtkb ? 1 : 0;
     return 0;
 }
 
-void KEYB_RenderVirtualKeyboard(TERM_State *state) {
+void KEYB_RenderVirtualKeyboard() {
     if (!active) return;
     // Render the virtual keyboard
     SDL_Rect rect;
 
     if (show_help) {
-        SDL_Rect rect = {.x = 0, .y = 0, .w = state->cfg.width, .h = state->cfg.height};
-        SDL_SetRenderDrawColor(state->renderer, 0, 0, 0, 255);
-        SDL_RenderFillRect(state->renderer, &rect);
-        SDL_SetRenderDrawColor(state->renderer, 255, 255, 255, 255);
+        SDL_Rect rect = {.x = 0, .y = 0, .w = cfg.width, .h = cfg.height};
+        SDL_SetRenderDrawColor(term.renderer, 0, 0, 0, 255);
+        SDL_RenderFillRect(term.renderer, &rect);
+        SDL_SetRenderDrawColor(term.renderer, 255, 255, 255, 255);
         SDL_Point pos = {.x = 8, .y = 30};
-        FOX_RenderText(state->font.virt_kb, (const Uint8 *)help, &pos);
+        FOX_RenderText(term.font.virt_kb, (const Uint8 *)help, &pos);
         pos.y += 16 * 22;
-        FOX_RenderText(state->font.virt_kb, (const Uint8 *)CREDIT, &pos);
+        FOX_RenderText(term.font.virt_kb, (const Uint8 *)CREDIT, &pos);
         return;
     }
     rect.w = (4 + total_length) * 16;
-    rect.h = (NUM_ROWS * 2 + 1) * 16;
-    rect.x = (state->cfg.width - rect.w) / 2;
-    rect.y = location ? state->cfg.height - rect.h - 16 * 2 : 16 * 2;
+    rect.h = (6 * 2 + 1) * 16;
+    rect.x = (cfg.width - rect.w) / 2;
+    rect.y = location ? cfg.height - rect.h - 16 * 2 : 16 * 2;
 
-    SDL_SetRenderDrawColor(state->renderer, 64, 64, 64, 255);
-    SDL_RenderFillRect(state->renderer, &rect);
+    SDL_SetRenderDrawColor(term.renderer, 64, 64, 64, 255);
+    SDL_RenderFillRect(term.renderer, &rect);
     int x;
     int y = rect.y + 10;
 
-    for (int j = 0; j < NUM_ROWS; j++) {
+    for (int j = 0; j < 6; j++) {
         x = rect.x + 10;
         for (int i = 0; i < row_length[j]; i++) {
             int      length = strlen(syms[shifted][j][i]);
             SDL_Rect rect2  = {.x = x, .y = y, .w = (length + 1) * 16 - 4, .h = 16 * 2 - 2};
             if (toggled[j][i]) {
                 if (selected_i == i && selected_j == j)
-                    SDL_SetRenderDrawColor(state->renderer, 255, 255, 128, 255);
-                else SDL_SetRenderDrawColor(state->renderer, 192, 192, 0, 255);
+                    SDL_SetRenderDrawColor(term.renderer, 255, 255, 128, 255);
+                else SDL_SetRenderDrawColor(term.renderer, 192, 192, 0, 255);
             } else if (selected_i == i && selected_j == j) {
-                SDL_SetRenderDrawColor(state->renderer, 128, 255, 128, 255);
+                SDL_SetRenderDrawColor(term.renderer, 128, 255, 128, 255);
             } else {
-                SDL_SetRenderDrawColor(state->renderer, 128, 128, 128, 255);
+                SDL_SetRenderDrawColor(term.renderer, 128, 128, 128, 255);
             }
-            SDL_RenderFillRect(state->renderer, &rect2);
-            SDL_SetRenderDrawColor(state->renderer, 0, 0, 0, 255);
+            SDL_RenderFillRect(term.renderer, &rect2);
+            SDL_SetRenderDrawColor(term.renderer, 0, 0, 0, 255);
             SDL_Point pos = {.x = x + 8, .y = y + 3};
-            FOX_RenderText(state->font.virt_kb, (const Uint8 *)syms[shifted][j][i], &pos);
+            FOX_RenderText(term.font.virt_kb, (const Uint8 *)syms[shifted][j][i], &pos);
             x += (length + 1) * 16;
         }
         y += 16 * 2;
     }
-    SDL_SetRenderDrawColor(state->renderer, 255, 255, 255, 255);
+    SDL_SetRenderDrawColor(term.renderer, 255, 255, 255, 255);
 }
 
 int KEYB_MoveCursor(int dx, int dy) {
@@ -111,10 +111,10 @@ int KEYB_MoveCursor(int dx, int dy) {
         if (selected_j > 0) {
             selected_i = KEYB_NewCol(visual_offset, selected_j, selected_j - 1);
             selected_j--;
-        } else selected_j = NUM_ROWS - 1;
+        } else selected_j = 5;
         if (selected_i >= row_length[selected_j]) { selected_i = row_length[selected_j] - 1; }
     } else if (dy == -1) {
-        if (selected_j < NUM_ROWS - 1) {
+        if (selected_j < 5) {
             selected_i = KEYB_NewCol(visual_offset, selected_j, selected_j + 1);
             selected_j++;
         } else selected_j = 0;
@@ -133,8 +133,8 @@ int KEYB_MoveCursor(int dx, int dy) {
 void KEYB_ClickKey() {
     int key = keys[shifted][selected_j][selected_i];
     if (mod_state & KMOD_CTRL) {
-        if (key >= 64 && key < 64 + 32) KEYB_SimulateKey(key - 64, STATE_DOWN);
-        else if (key >= 97 && key < 97 + 31) KEYB_SimulateKey(key - 96, STATE_DOWN);
+        if (key >= 64 && key < 64 + 32) KEYB_SimulateKey(key - 64, STATE_TYPED);
+        else if (key >= 97 && key < 97 + 31) KEYB_SimulateKey(key - 96, STATE_TYPED);
     } else if ((mod_state & KMOD_SHIFT || mod_state & KMOD_CAPS) &&
                (key >= SDLK_a && key <= SDLK_z)) {
         KEYB_SimulateKey(key - SDLK_a + 'A', STATE_TYPED);
@@ -156,8 +156,6 @@ void KEYB_Shift(int state) {
 void KEYB_ToggleMod() {
     toggled[selected_j][selected_i] = 1 - toggled[selected_j][selected_i];
     KEYB_SimulateKey(keys[shifted][selected_j][selected_i], 1 + toggled[selected_j][selected_i]);
-    KEYB_UpdateModstate(keys[shifted][selected_j][selected_i],
-                        1 + toggled[selected_j][selected_i]);
     if (selected_j == 4 && (selected_i == 0 || selected_i == 11))
         shifted = toggled[selected_j][selected_i];
 }
