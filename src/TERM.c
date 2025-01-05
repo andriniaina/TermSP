@@ -152,7 +152,7 @@ void TERM_Resize(int width, int height) {
 void TERM_Update() {
   term.ticks = SDL_GetTicks();
 
-  if (term.ticks > (term.cursor.ticks + 50)) {
+  if (term.ticks > (term.cursor.ticks + cfg.cursorinterval)) {
     term.cursor.ticks = term.ticks;
     term.cursor.visible = !term.cursor.visible;
     term.dirty = true;

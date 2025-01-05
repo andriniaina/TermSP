@@ -7,6 +7,7 @@ TERM_Config cfg = {
     .boldfontpattern = "/mnt/SDCARD/Apps/Terminal/resources/Hack-Bold.ttf",
     .virtkb = 0,
     .refreshrate = 30,
+    .cursorinterval = 250,
     .fontsize = 18,
     .width = 0,
     .height = 0,
@@ -45,13 +46,14 @@ static const char help[] = {
     "Options:\n"
     "  -h\tDisplay help text\n"
     "  -k\tShow virtual keyboard at start\n"
-    "  -r\tSet the refresh rate (default 20hz)\n"
+    "  -r\tSet the refresh rate (default 30hz)\n"
+    "  -c\tSet the cursor blinking interval (default 250)\n"
     "  -f\tSet regular font via path (fontconfig pattern not yet supported)\n"
     "  -b\tSet bold font via path (fontconfig pattern not yet supported)\n"
     "  -s\tSet fontsize\n"
     "  -e\tSet child process executable path\n"};
 
-static const char options[] = "hkmcd:f:s:r:b:e:";
+static const char options[] = "hkr:c:f:b:s:e:";
 extern char *optarg;
 extern int optind;
 
@@ -70,6 +72,9 @@ int parseArgs(int argc, char **argv) {
         break;
       case 'r':
         if (optarg != NULL) cfg.refreshrate = atoi(optarg);
+        break;
+      case 'c':
+        if (optarg != NULL) cfg.cursorinterval = atoi(optarg);
         break;
       case 'f':
         if (optarg != NULL) cfg.fontpattern = optarg;

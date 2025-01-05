@@ -24,6 +24,7 @@ typedef struct {
   const char *boldfontpattern;
   int virtkb;
   int refreshrate;
+  int cursorinterval;
   int fontsize;
   int width;
   int height;
