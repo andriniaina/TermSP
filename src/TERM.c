@@ -105,9 +105,9 @@ int TERM_Init() {
       exit(EXIT_FAILURE);
     }
     close(slave_fd);
-    char *args[64];
     if (cfg.gnuscreen) {
-      args[0] = cfg.gnuscreen;
+      char **args = malloc(64 * sizeof(args));
+      args[0] = "screen";
       args[1] = "-c";
       args[2] = SCREENRC;
       int i = 0;
@@ -116,13 +116,16 @@ int TERM_Init() {
         i++;
       }
       args[i + 3] = NULL;
-    } else {
+      execvp(args[0], args);
+    } else if (!cfg.args) {
       char *env_shell = getenv("SHELL");
       if (env_shell == NULL) env_shell = "/bin/sh";
-      char **args = cfg.args ? cfg.args : (char *[]){env_shell, "-i", NULL};
+      char **args = (char *[]){env_shell, "-i", NULL};
+      execvp(args[0], args);
+    } else {
+      execvp(cfg.args[0], cfg.args);
     }
 
-    execvp(args[0], args);
     perror("execvp failed");
     exit(EXIT_FAILURE);
   } else {

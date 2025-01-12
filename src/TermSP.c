@@ -13,7 +13,7 @@ TERM_Config cfg = {
     .height = 0,
     .rows = 0,
     .columns = 0,
-    .gnuscreen = NULL};
+    .gnuscreen = 0};
 
 int parseArgs(int argc, char **argv);
 int main(int argc, char *argv[]) {
@@ -38,7 +38,6 @@ int main(int argc, char *argv[]) {
   }
 
   TERM_DeinitializeTerminal();
-  if (cfg.gnuscreen) free(cfg.gnuscreen);
   return 0;
 }
 
@@ -65,27 +64,13 @@ int parseArgs(int argc, char **argv) {
   int status = 0;
 
   while ((option = getopt(argc, argv, options)) != -1) {
-    char *screen;
-    char *path;
-    char *screen_path;
     switch (option) {
       case 'h':
         puts(help);
         status = 1;
         break;
       case 'S':
-        screen = getenv("PATH");
-        path = strtok(screen, ":");
-        while (path) {
-          screen_path = malloc(strlen(path) + strlen("/screen") + 1);
-          strcpy(screen_path, path);
-          strcat(screen_path, "/screen");
-          if (access(screen_path, X_OK) == 0) {
-            cfg.gnuscreen = screen_path;
-            break;
-          }
-          path = strtok(NULL, ":");
-        }
+        cfg.gnuscreen = 1;
         break;
       case 'k':
         cfg.virtkb = 1;

@@ -31,7 +31,7 @@ typedef struct {
   int height;
   int rows;
   int columns;
-  char *gnuscreen;
+  int gnuscreen;
 } TERM_Config;
 extern TERM_Config cfg;
 
