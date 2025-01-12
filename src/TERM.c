@@ -105,16 +105,22 @@ int TERM_Init() {
       exit(EXIT_FAILURE);
     }
     close(slave_fd);
-    char* args[64];
-    args[0] = "/mnt/SDCARD/Apps/Terminal/screen";
-    args[1] = "-c";
-    args[2] = "/mnt/SDCARD/Apps/Terminal/.screenrc";
-    int i = 0;
-    while (cfg.args && cfg.args[i]) {
-      args[i + 3] = cfg.args[i];
-      i++;
+    char *args[64];
+    if (cfg.gnuscreen) {
+      args[0] = cfg.gnuscreen;
+      args[1] = "-c";
+      args[2] = SCREENRC;
+      int i = 0;
+      while (cfg.args && cfg.args[i]) {
+        args[i + 3] = cfg.args[i];
+        i++;
+      }
+      args[i + 3] = NULL;
+    } else {
+      char *env_shell = getenv("SHELL");
+      if (env_shell == NULL) env_shell = "/bin/sh";
+      char **args = cfg.args ? cfg.args : (char *[]){env_shell, "-i", NULL};
     }
-    args[i + 3] = NULL;
 
     execvp(args[0], args);
     perror("execvp failed");
@@ -278,10 +284,9 @@ void renderCell(int x, int y) {
 
 static void renderCursor() {
   if (term.cursor.active && term.cursor.visible) {
-    SDL_Rect rect = {
-        term.cursor.position.x * term.font.metrics->max_advance,
-        4 + term.cursor.position.y * term.font.metrics->height, 4,
-        term.font.metrics->height};
+    SDL_Rect rect = {term.cursor.position.x * term.font.metrics->max_advance,
+                     4 + term.cursor.position.y * term.font.metrics->height, 4,
+                     term.font.metrics->height};
     SDL_RenderFillRect(term.renderer, &rect);
   }
 }
@@ -328,5 +333,5 @@ void updateLibPath(const char *new_path) {
   if (setenv(env_var, new_value, 1) != 0) {
     perror("setenv");
   }
-    free(new_value);
+  free(new_value);
 }

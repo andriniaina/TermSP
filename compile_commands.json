@@ -1,0 +1,70 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-O3",
+      "-flto",
+      "-I/usr/include/SDL2",
+      "-D_REENTRANT",
+      "-Iincludes/",
+      "-DSCREENRC=\"/mnt/SDCARD/Apps/Terminal/.screenrc\"",
+      "-o./build/TermSP",
+      "src/EVENTS.c"
+    ],
+    "directory": "/home/nicolas/github/trimui-smart-pro-toolchain/workspace/1_Trimui/TermSP",
+    "file": "/home/nicolas/github/trimui-smart-pro-toolchain/workspace/1_Trimui/TermSP/src/EVENTS.c"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-O3",
+      "-flto",
+      "-I/usr/include/SDL2",
+      "-D_REENTRANT",
+      "-Iincludes/",
+      "-DSCREENRC=\"/mnt/SDCARD/Apps/Terminal/.screenrc\"",
+      "-o./build/TermSP",
+      "src/KEYB.c"
+    ],
+    "directory": "/home/nicolas/github/trimui-smart-pro-toolchain/workspace/1_Trimui/TermSP",
+    "file": "/home/nicolas/github/trimui-smart-pro-toolchain/workspace/1_Trimui/TermSP/src/KEYB.c"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-O3",
+      "-flto",
+      "-I/usr/include/SDL2",
+      "-D_REENTRANT",
+      "-Iincludes/",
+      "-DSCREENRC=\"/mnt/SDCARD/Apps/Terminal/.screenrc\"",
+      "-o./build/TermSP",
+      "src/TERM.c"
+    ],
+    "directory": "/home/nicolas/github/trimui-smart-pro-toolchain/workspace/1_Trimui/TermSP",
+    "file": "/home/nicolas/github/trimui-smart-pro-toolchain/workspace/1_Trimui/TermSP/src/TERM.c"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-Wall",
+      "-O3",
+      "-flto",
+      "-I/usr/include/SDL2",
+      "-D_REENTRANT",
+      "-Iincludes/",
+      "-DSCREENRC=\"/mnt/SDCARD/Apps/Terminal/.screenrc\"",
+      "-o./build/TermSP",
+      "src/TermSP.c"
+    ],
+    "directory": "/home/nicolas/github/trimui-smart-pro-toolchain/workspace/1_Trimui/TermSP",
+    "file": "/home/nicolas/github/trimui-smart-pro-toolchain/workspace/1_Trimui/TermSP/src/TermSP.c"
+  }
+]

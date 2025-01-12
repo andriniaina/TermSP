@@ -12,7 +12,8 @@ TERM_Config cfg = {
     .width = 0,
     .height = 0,
     .rows = 0,
-    .columns = 0};
+    .columns = 0,
+    .gnuscreen = NULL};
 
 int parseArgs(int argc, char **argv);
 int main(int argc, char *argv[]) {
@@ -37,6 +38,7 @@ int main(int argc, char *argv[]) {
   }
 
   TERM_DeinitializeTerminal();
+  if (cfg.gnuscreen) free(cfg.gnuscreen);
   return 0;
 }
 
@@ -45,6 +47,7 @@ static const char help[] = {
     "\tsdlterm [option...]* [child options...]*\n"
     "Options:\n"
     "  -h\tDisplay help text\n"
+    "  -S\tStart with gnu-screen\n"
     "  -k\tShow virtual keyboard at start\n"
     "  -r\tSet the refresh rate (default 30hz)\n"
     "  -c\tSet the cursor blinking interval (default 250)\n"
@@ -53,7 +56,7 @@ static const char help[] = {
     "  -s\tSet fontsize\n"
     "  -e\tSet child process executable path\n"};
 
-static const char options[] = "hkr:c:f:b:s:e:";
+static const char options[] = "hSkr:c:f:b:s:e:";
 extern char *optarg;
 extern int optind;
 
@@ -62,10 +65,27 @@ int parseArgs(int argc, char **argv) {
   int status = 0;
 
   while ((option = getopt(argc, argv, options)) != -1) {
+    char *screen;
+    char *path;
+    char *screen_path;
     switch (option) {
       case 'h':
         puts(help);
         status = 1;
+        break;
+      case 'S':
+        screen = getenv("PATH");
+        path = strtok(screen, ":");
+        while (path) {
+          screen_path = malloc(strlen(path) + strlen("/screen") + 1);
+          strcpy(screen_path, path);
+          strcat(screen_path, "/screen");
+          if (access(screen_path, X_OK) == 0) {
+            cfg.gnuscreen = screen_path;
+            break;
+          }
+          path = strtok(NULL, ":");
+        }
         break;
       case 'k':
         cfg.virtkb = 1;

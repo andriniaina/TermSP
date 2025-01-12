@@ -7,10 +7,15 @@ else
 
 endif
 
+ifdef ${SCREENRC}
+	DEF='-D"'${SCREENRC}'"'
+else
+	DEF='-DSCREENRC="/mnt/SDCARD/Apps/Terminal/.screenrc"'
+endif
 
 all:
 	mkdir -p ./build
-	cc ${CFLAGS} ${LDFLAGS} src/*.c -o./build/TermSP ${LDLIBS}
+	cc ${CFLAGS} ${DEF} ${LDFLAGS} src/*.c -o./build/TermSP ${LDLIBS}
 
 clean:
 	rm -rv ./build
