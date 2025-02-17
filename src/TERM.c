@@ -90,7 +90,7 @@ int TERM_Init() {
     return -1;
   else if (term.child == 0) {
     setenv("PS1", "\\[\\033[32m\\]\\w\\[\\033[00m\\]\\$ ", 1);
-    updateLibPath("/mnt/SDCARD/Apps/Terminal/lib");
+    updateLibPath("/userdata/system/TermSP");
 
     int slave_fd = open(slave_name, O_RDWR);
     struct termios terminal_attr;

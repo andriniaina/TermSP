@@ -3,8 +3,8 @@
 TERM_State term = {0};
 TERM_Config cfg = {
     .args = NULL,
-    .fontpattern = "/mnt/SDCARD/Apps/Terminal/resources/Hack-Regular.ttf",
-    .boldfontpattern = "/mnt/SDCARD/Apps/Terminal/resources/Hack-Bold.ttf",
+    .fontpattern = "/userdata/system/TermSP/Hack-Regular.ttf",
+    .boldfontpattern = "/userdata/system/TermSP/Hack-Bold.ttf",
     .virtkb = 0,
     .refreshrate = 30,
     .cursorinterval = 250,

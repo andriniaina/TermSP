@@ -15,7 +15,7 @@ endif
 
 all:
 	mkdir -p ./build
-	cc ${CFLAGS} ${DEF} ${LDFLAGS} src/*.c -o./build/TermSP ${LDLIBS}
+	aarch64-linux-gnu-gcc ${CFLAGS} ${DEF} ${LDFLAGS} src/*.c -o./build/TermSP ${LDLIBS} -DSTDC_HEADERS -I/usr/include/aarch64-linux-gnu --prefix=/userdata/libs
 
 clean:
 	rm -rv ./build
