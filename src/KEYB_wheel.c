@@ -49,35 +49,40 @@ int GetWheelSelectedCharIndexRight()
 
 void _drawWheel(int select_char_index, int char_start, int nbChars, int centerX, int centerY)
 {
-    if (select_char_index > 0)
+    SDL_SetRenderDrawColor(term.renderer, 93, 226, 231, SDL_ALPHA_OPAQUE);
+    if (select_char_index >= 0)
     {
         double angle = 2 * PI * (float)select_char_index / nbChars;
-        SDL_SetRenderDrawColor(term.renderer, 93, 226, 231, SDL_ALPHA_OPAQUE);
 #define LINE_LENGTH 100
         int x = LINE_LENGTH * cos(angle);
         int y = LINE_LENGTH * sin(angle);
         SDL_RenderDrawLine(term.renderer, centerX, centerY, centerX + x, centerY - y);
-        for (int i = 0; i < nbChars; i++)
-        {
-            double a = 2 * PI * (float)i / nbChars;
-            int x = LINE_LENGTH * cos(a);
-            int y = LINE_LENGTH * sin(a);
+    }
+    for (int i = 0; i < nbChars; i++)
+    {
+        double a = 2 * PI * (float)i / nbChars;
+        int x = LINE_LENGTH * cos(a);
+        int y = LINE_LENGTH * sin(a);
 #define OFFSET_X -6
 #define OFFSET_Y -24
-            SDL_Point pos = {centerX + x + OFFSET_X, centerY - y + OFFSET_Y};
+        SDL_Point pos = {centerX + x + OFFSET_X, centerY - y + OFFSET_Y};
+        FOX_RenderChar(term.font.virt_kb_wheel, vKeyboardChars[i + char_start], 0, &pos);
+        if (i == select_char_index)
+        {
+            SDL_SetRenderDrawColor(term.renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
             FOX_RenderChar(term.font.virt_kb_wheel, vKeyboardChars[i + char_start], 0, &pos);
-            if (i == select_char_index)
-            {
-                SDL_SetRenderDrawColor(term.renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-                FOX_RenderChar(term.font.virt_kb_wheel, vKeyboardChars[i + char_start], 0, &pos);
-                SDL_SetRenderDrawColor(term.renderer, 93, 226, 231, SDL_ALPHA_OPAQUE);
-            }
+            SDL_SetRenderDrawColor(term.renderer, 93, 226, 231, SDL_ALPHA_OPAQUE);
         }
     }
 }
 void DrawWheelVirtualKeyboard()
 {
     int center = cfg.width / 2;
-    _drawWheel(GetWheelSelectedCharIndexLeft(), 0, NB_CHARS_LEFT, center - 200, 300);
-    _drawWheel(GetWheelSelectedCharIndexRight(), NB_CHARS_RIGHT_OFFSET, NB_CHARS_RIGHT, center + 200, 300);
+    int xIndex = GetWheelSelectedCharIndexLeft();
+    int yIndex = GetWheelSelectedCharIndexRight();
+    if (xIndex >= 0 || yIndex >= 0)
+    {
+        _drawWheel(xIndex, 0, NB_CHARS_LEFT, center - 200, 300);
+        _drawWheel(yIndex, NB_CHARS_RIGHT_OFFSET, NB_CHARS_RIGHT, center + 200, 300);
+    }
 }

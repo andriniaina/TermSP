@@ -358,15 +358,17 @@ int handleJoyAxis(SDL_Event *ev)
         // else if (ev->jaxis.value > 16000) KEYB_SimulateKey(SDLK_DOWN, STATE_TYPED);
         break;
     case 2: // Left Trigger
+        if (ev->jaxis.value < 20000)
+            return;
         int iLeft = GetWheelSelectedCharIndexLeft();
-        if (iLeft > 0)
+        if (iLeft >= 0)
         {
             KEYB_SimulateKey(vKeyboardChars[iLeft], STATE_TYPED);
         }
         else
         {
-            int iRight = GetWheelSelectedCharIndexLeft();
-            if (iRight > 0)
+            int iRight = GetWheelSelectedCharIndexRight();
+            if (iRight >= 0)
             {
                 KEYB_SimulateKey(vKeyboardChars[iRight + NB_CHARS_RIGHT_OFFSET], STATE_TYPED);
             }

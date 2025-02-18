@@ -1,10 +1,12 @@
 CC := aarch64-linux-gnu-gcc    
 SYS_INCLUDE_PATH :=  /usr/include/aarch64-linux-gnu
+BUILD_FOLDER = build-arm64
+
 CC := cc
 SYS_INCLUDE_PATH :=  /usr/include
 BUILD_FOLDER = build-x64
 
-TEST := 1
+#TEST := 1
 ifeq ($(TEST), 1)
 	LDLIBS := -Wl,--gc-sections `sdl2-config --libs` -Llibs-x64 -lsdlfox -lvterm
 	CFLAGS := -Wall -g `sdl2-config --cflags` -Iincludes/ -ggdb -fsanitize=address,undefined -DTEST
