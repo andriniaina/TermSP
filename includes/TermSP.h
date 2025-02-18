@@ -51,6 +51,7 @@ typedef struct {
     FOX_Font *regular;
     FOX_Font *bold;
     FOX_Font *virt_kb;
+    FOX_Font *virt_kb_wheel;
   } font;
   struct {
     SDL_Point position;

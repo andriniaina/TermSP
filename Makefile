@@ -1,6 +1,13 @@
+CC := aarch64-linux-gnu-gcc    
+SYS_INCLUDE_PATH :=  /usr/include/aarch64-linux-gnu
+CC := cc
+SYS_INCLUDE_PATH :=  /usr/include
+BUILD_FOLDER = build-x64
+
+TEST := 1
 ifeq ($(TEST), 1)
-	LDLIBS := -Wl,--gc-sections `sdl2-config --libs` -Llibs -lsdlfox -lvterm
-	CFLAGS := -Wall -g `sdl2-config --cflags` -Iincludes/ -ggdb -fsanitize=address,undefined
+	LDLIBS := -Wl,--gc-sections `sdl2-config --libs` -Llibs-x64 -lsdlfox -lvterm
+	CFLAGS := -Wall -g `sdl2-config --cflags` -Iincludes/ -ggdb -fsanitize=address,undefined -DTEST
 else
 	LDLIBS := -Wl,--gc-sections `sdl2-config --libs` -lutil -Llibs -lsdlfox -lvterm
 	CFLAGS := -Wall -O3 -flto `sdl2-config --cflags` -Iincludes/
@@ -14,11 +21,11 @@ else
 endif
 
 all:
-	mkdir -p ./build
-	aarch64-linux-gnu-gcc ${CFLAGS} ${DEF} ${LDFLAGS} src/*.c -o./build/TermSP ${LDLIBS} -DSTDC_HEADERS -I/usr/include/aarch64-linux-gnu --prefix=/userdata/libs
+	mkdir -p ./${BUILD_FOLDER}
+	${CC} ${CFLAGS} ${DEF} ${LDFLAGS} src/*.c -o./${BUILD_FOLDER}/TermSP ${LDLIBS} -DSTDC_HEADERS -ldl -lm -I${SYS_INCLUDE_PATH} --prefix=/userdata/libs
 
 clean:
-	rm -rv ./build
+	rm -rv ./${BUILD_FOLDER}
 
 install:
-	sudo cp -v ./build/TermSP /usr/local/bin
+	sudo cp -v ./${BUILD_FOLDER}/TermSP /usr/local/bin

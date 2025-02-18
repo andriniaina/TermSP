@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        ".fantomasignore": "ignore",
+        "compare": "cpp",
+        "math.h": "c",
+        "sdl_stdinc.h": "c",
+        "termsp.h": "c",
+        "sdl.h": "c",
+        "sdl_keycode.h": "c",
+        "term.h": "c",
+        "KEYB_wheel.h": "c"
+    },
+    "editor.formatOnSaveMode": "modifications",
+}

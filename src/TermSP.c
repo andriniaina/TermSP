@@ -3,10 +3,10 @@
 TERM_State term = {0};
 TERM_Config cfg = {
     .args = NULL,
-    .fontpattern = "/userdata/system/TermSP/Hack-Regular.ttf",
-    .boldfontpattern = "/userdata/system/TermSP/Hack-Bold.ttf",
+    .fontpattern = "/home/dev/me/Hack-Regular.ttf",
+    .boldfontpattern = "/home/dev/me/Hack-Bold.ttf",
     .virtkb = 0,
-    .refreshrate = 30,
+    .refreshrate = 25,
     .cursorinterval = 250,
     .fontsize = 18,
     .width = 0,
@@ -17,6 +17,10 @@ TERM_Config cfg = {
 
 int parseArgs(int argc, char **argv);
 int main(int argc, char *argv[]) {
+  #if defined(TEST)
+  cfg.width = 1024;
+  cfg.height = 720;
+  #else
   int fh = open("/dev/fb0", O_RDONLY);
   if (fh < 0) {
     fprintf(stderr, "Couldn't open framebuffer.\n");
@@ -27,6 +31,7 @@ int main(int argc, char *argv[]) {
   close(fh);
   cfg.width = vinfo.xres;
   cfg.height = vinfo.yres;
+  #endif
 
   if (parseArgs(argc, argv)) return -1;
   if (TERM_Init()) return -1;
