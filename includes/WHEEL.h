@@ -43,6 +43,6 @@ static SDL_KeyCode vKeyboardChars[] = {
     SDLK_EQUALS,
     SDLK_UNDERSCORE,
 };
-int GetWheelSelectedCharIndexLeft();
-int GetWheelSelectedCharIndexRight();
-void DrawWheelVirtualKeyboard();
+int WHEEL_GetSelectedCharIndexLeft();
+int WHEEL_GetSelectedCharIndexRight();
+void WHEEL_Draw();

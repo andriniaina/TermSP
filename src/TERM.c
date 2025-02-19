@@ -1,5 +1,5 @@
 #include "TERM.h"
-#include "KEYB_wheel.h"
+#include "WHEEL.h"
 #define PI 3.14159265358979323846264338327950288 /**< pi */
 
 static VTermScreenCallbacks callbacks = {.movecursor = moveCursor,
@@ -218,7 +218,7 @@ void TERM_Update()
     SDL_SetRenderDrawColor(term.renderer, 0, 0, 0, 255);
     SDL_RenderClear(term.renderer);
     renderScreen();
-    DrawWheelVirtualKeyboard();
+    WHEEL_Draw();
     SDL_RenderPresent(term.renderer);
   }
 }

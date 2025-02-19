@@ -41,6 +41,7 @@ static SDL_Keycode keys[2][NUM_ROWS][NUM_KEYS] = {
 static unsigned char toggled[NUM_ROWS][NUM_KEYS];
 
 static int show_help    = 0;
+static int m            = 2;
 static int active       = 0;
 static int location     = 1;
 static int selected_i   = 0;
@@ -56,6 +57,7 @@ int KEYB_MoveCursor(int dx, int dy);
 void KEYB_ClickKey();
 void KEYB_Toggle();
 void KEYB_SwitchLocation();
+void KEYB_Cycle_LocationActive();
 void KEYB_Shift(int state);
 void KEYB_ToggleMod();
 

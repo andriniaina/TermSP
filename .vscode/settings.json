@@ -8,7 +8,8 @@
         "sdl.h": "c",
         "sdl_keycode.h": "c",
         "term.h": "c",
-        "KEYB_wheel.h": "c"
+        "WHEEL.h": "c",
+        "keyb.h": "c"
     },
     "editor.formatOnSaveMode": "modifications",
 }

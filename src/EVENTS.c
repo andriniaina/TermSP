@@ -1,5 +1,5 @@
 #include "EVENTS.h"
-#include "KEYB_wheel.h"
+#include "WHEEL.h"
 
 extern int childState;
 
@@ -215,6 +215,9 @@ static void handleKeyboard(SDL_Event *event)
         break;
 
     case SDLK_F4:
+    #if TEST
+    KEYB_Cycle_LocationActive();
+    #endif
         cmd = "\033OS";
         break;
 
@@ -283,8 +286,8 @@ int handleJoyButtons(SDL_Event *ev)
         case 5: // Right Shoulder (R1) (b5)
             KEYB_ToggleMod();
             break;
-        case 6: // Back button (b6)
-            KEYB_SimulateKey(SDLK_TAB, STATE_DOWN);
+        case 6: // Select button (b6)
+            KEYB_Cycle_LocationActive();
             break;
         case 7: // Start button (b7)
             KEYB_SimulateKey(SDLK_RETURN, STATE_DOWN);
@@ -359,15 +362,15 @@ int handleJoyAxis(SDL_Event *ev)
         break;
     case 2: // Left Trigger
         if (ev->jaxis.value < 20000)
-            return;
-        int iLeft = GetWheelSelectedCharIndexLeft();
+            return 0;
+        int iLeft = WHEEL_GetSelectedCharIndexLeft();
         if (iLeft >= 0)
         {
             KEYB_SimulateKey(vKeyboardChars[iLeft], STATE_TYPED);
         }
         else
         {
-            int iRight = GetWheelSelectedCharIndexRight();
+            int iRight = WHEEL_GetSelectedCharIndexRight();
             if (iRight >= 0)
             {
                 KEYB_SimulateKey(vKeyboardChars[iRight + NB_CHARS_RIGHT_OFFSET], STATE_TYPED);

@@ -1,4 +1,4 @@
-#include "KEYB_wheel.h"
+#include "WHEEL.h"
 #include <SDL2/SDL_stdinc.h>
 #define PI 3.14159265358979323846 /* pi */
 
@@ -32,14 +32,14 @@ int _getWheelCharIndex(int axisXid, int axisYid, int nbChars)
     return i;
 }
 
-int GetWheelSelectedCharIndexLeft()
+int WHEEL_GetSelectedCharIndexLeft()
 {
 #if defined(TEST)
     return 2;
 #endif
     return _getWheelCharIndex(AXIS_LEFT_X, AXIS_LEFT_Y, NB_CHARS_LEFT);
 }
-int GetWheelSelectedCharIndexRight()
+int WHEEL_GetSelectedCharIndexRight()
 {
 #if defined(TEST)
     return 5;
@@ -75,11 +75,11 @@ void _drawWheel(int select_char_index, int char_start, int nbChars, int centerX,
         }
     }
 }
-void DrawWheelVirtualKeyboard()
+void WHEEL_Draw()
 {
     int center = cfg.width / 2;
-    int xIndex = GetWheelSelectedCharIndexLeft();
-    int yIndex = GetWheelSelectedCharIndexRight();
+    int xIndex = WHEEL_GetSelectedCharIndexLeft();
+    int yIndex = WHEEL_GetSelectedCharIndexRight();
     if (xIndex >= 0 || yIndex >= 0)
     {
         _drawWheel(xIndex, 0, NB_CHARS_LEFT, center - 200, 300);
