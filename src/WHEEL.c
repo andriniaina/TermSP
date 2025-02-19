@@ -1,3 +1,4 @@
+#include "EVENTS.h"
 #include "WHEEL.h"
 #include <SDL2/SDL_stdinc.h>
 #define PI 3.14159265358979323846 /* pi */
@@ -85,4 +86,24 @@ void WHEEL_Draw()
         _drawWheel(xIndex, 0, NB_CHARS_LEFT, center - 200, 300);
         _drawWheel(yIndex, NB_CHARS_RIGHT_OFFSET, NB_CHARS_RIGHT, center + 200, 300);
     }
+}
+
+int WHEEL_PressKey()
+{
+    int iLeft = WHEEL_GetSelectedCharIndexLeft();
+    if (iLeft >= 0)
+    {
+        KEYB_SimulateKey(vKeyboardChars[iLeft], STATE_TYPED);
+        return 1;
+    }
+    else
+    {
+        int iRight = WHEEL_GetSelectedCharIndexRight();
+        if (iRight >= 0)
+        {
+            KEYB_SimulateKey(vKeyboardChars[iRight + NB_CHARS_RIGHT_OFFSET], STATE_TYPED);
+            return 1;
+        }
+    }
+    return 0;
 }

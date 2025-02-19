@@ -151,7 +151,6 @@ void KEYB_Cycle_LocationActive() {
     if(++m>3) m=1;
     location = (m>>1) & 1;
     active = (m) & 1;
-    fprintf(stderr, "m=%d,location=%d,active=%d\n", m,location,active);
 }
 
 void KEYB_Shift(int state) {

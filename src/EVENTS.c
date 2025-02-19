@@ -215,9 +215,9 @@ static void handleKeyboard(SDL_Event *event)
         break;
 
     case SDLK_F4:
-    #if TEST
-    KEYB_Cycle_LocationActive();
-    #endif
+#if TEST
+        KEYB_Cycle_LocationActive();
+#endif
         cmd = "\033OS";
         break;
 
@@ -274,26 +274,32 @@ int handleJoyButtons(SDL_Event *ev)
             KEYB_ClickKey();
             break;
         case 2: // X button (b2)
-            KEYB_Toggle();
-            return 1;
+            // TODO call KEYB_Shift(toggle) instead
+            KEYB_SimulateKey(SDLK_CAPSLOCK, STATE_DOWN);
+            //return 1;
             break;
         case 3: // Y button (b3)
-            KEYB_SwitchLocation();
+            KEYB_SimulateKey(SDLK_TAB, STATE_DOWN);
             break;
         case 4: // Left Shoulder (L1) (b4)
-            KEYB_Shift(1);
+            if (!WHEEL_PressKey())
+                KEYB_Shift(1);
             break;
         case 5: // Right Shoulder (R1) (b5)
-            KEYB_ToggleMod();
+            if (!WHEEL_PressKey())
+                KEYB_ToggleMod();
             break;
         case 6: // Select button (b6)
             KEYB_Cycle_LocationActive();
             break;
         case 7: // Start button (b7)
-            KEYB_SimulateKey(SDLK_RETURN, STATE_DOWN);
+            if (SDL_JoystickGetButton(term.joystick, 8) > 0)
+                return -1; // hotkey+start=exit
+            else
+                KEYB_SimulateKey(SDLK_RETURN, STATE_DOWN);
             break;
         case 8: // Guide button (Home) (b8)
-            return -1;
+            // return -1; // exit
             break;
         case 9: // Left Stick Button (L3) (b9)
             break;
@@ -353,29 +359,12 @@ int handleJoyAxis(SDL_Event *ev)
     switch (ev->jaxis.axis)
     {
     case 0: // Left Stick X-Axis
-        // if (ev->jaxis.value < -16000) KEYB_SimulateKey(SDLK_LEFT, STATE_TYPED);
-        // else if (ev->jaxis.value > 16000) KEYB_SimulateKey(SDLK_RIGHT, STATE_TYPED);
         break;
     case 1: // Left Stick Y-Axis
-        // if (ev->jaxis.value < -16000) KEYB_SimulateKey(SDLK_UP, STATE_TYPED);
-        // else if (ev->jaxis.value > 16000) KEYB_SimulateKey(SDLK_DOWN, STATE_TYPED);
         break;
     case 2: // Left Trigger
-        if (ev->jaxis.value < 20000)
-            return 0;
-        int iLeft = WHEEL_GetSelectedCharIndexLeft();
-        if (iLeft >= 0)
-        {
-            KEYB_SimulateKey(vKeyboardChars[iLeft], STATE_TYPED);
-        }
-        else
-        {
-            int iRight = WHEEL_GetSelectedCharIndexRight();
-            if (iRight >= 0)
-            {
-                KEYB_SimulateKey(vKeyboardChars[iRight + NB_CHARS_RIGHT_OFFSET], STATE_TYPED);
-            }
-        }
+        if (ev->jaxis.value > 16000)
+            WHEEL_PressKey();
         break;
     case 3:
         event.type = SDL_MOUSEMOTION;
@@ -390,8 +379,8 @@ int handleJoyAxis(SDL_Event *ev)
         SDL_PushEvent(&event);
         break;
     case 5: // Right Trigger
-        if (ev->jaxis.value == 32767)
-            KEYB_SimulateKey(SDLK_F4, STATE_TYPED);
+        if (ev->jaxis.value > 16000)
+            WHEEL_PressKey();
         break;
     }
     return 0;

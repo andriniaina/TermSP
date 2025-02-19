@@ -46,3 +46,4 @@ static SDL_KeyCode vKeyboardChars[] = {
 int WHEEL_GetSelectedCharIndexLeft();
 int WHEEL_GetSelectedCharIndexRight();
 void WHEEL_Draw();
+int WHEEL_PressKey();
