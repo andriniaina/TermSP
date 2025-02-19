@@ -1,8 +1,41 @@
 #include "EVENTS.h"
 #include "WHEEL.h"
 #include <SDL2/SDL_stdinc.h>
+#include <SDL2/SDL_image.h>
 #define PI 3.14159265358979323846 /* pi */
+static SDL_Surface *image_LB;
+static SDL_Surface *image_RB;
+static SDL_Texture *texture_LB;
+static SDL_Texture *texture_RB;
+static SDL_Rect rectLB = {0, 100, 64, 64};
+static SDL_Rect rectRB = {500, 100, 64, 64};
+static int center = 0;
 
+int WHEEL_init()
+{
+    center = cfg.width / 2;
+    rectLB.x = center - 300 - rectLB.w;
+    rectRB.x = center + 300;
+
+    image_LB = IMG_Load("res/Light/T_X_LB_Light.png");
+    if (image_LB == NULL)
+        fprintf(stderr, "Could not load resource %s", SDL_GetError());
+
+    image_RB = IMG_Load("res/Light/T_X_RB_Light.png");
+    if (image_RB == NULL)
+        fprintf(stderr, "Could not load resource %s", SDL_GetError());
+
+    texture_LB = SDL_CreateTextureFromSurface(term.renderer, image_LB);
+    texture_RB = SDL_CreateTextureFromSurface(term.renderer, image_RB);
+}
+int WHEEL_deinit()
+{
+    SDL_DestroyTexture(texture_LB);
+    SDL_DestroyTexture(texture_RB);
+
+    SDL_FreeSurface(image_LB);
+    SDL_FreeSurface(image_RB);
+}
 int _getWheelCharIndex(int axisXid, int axisYid, int nbChars)
 {
 #define THRESHOLD 300
@@ -78,11 +111,13 @@ void _drawWheel(int select_char_index, int char_start, int nbChars, int centerX,
 }
 void WHEEL_Draw()
 {
-    int center = cfg.width / 2;
     int xIndex = WHEEL_GetSelectedCharIndexLeft();
     int yIndex = WHEEL_GetSelectedCharIndexRight();
     if (xIndex >= 0 || yIndex >= 0)
     {
+        SDL_RenderCopy(term.renderer, texture_LB, NULL, &rectLB);
+        SDL_RenderCopy(term.renderer, texture_RB, NULL, &rectRB);
+
         _drawWheel(xIndex, 0, NB_CHARS_LEFT, center - 200, 300);
         _drawWheel(yIndex, NB_CHARS_RIGHT_OFFSET, NB_CHARS_RIGHT, center + 200, 300);
     }

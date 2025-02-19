@@ -34,6 +34,7 @@ int TERM_Init()
       term.window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   // SDL_CreateWindowAndRenderer(0, 0, SDL_WINDOW_FULLSCREEN, &term.window,
   //                             &term.renderer);
+  //term.vscreen = SDL_GetWindowSurface(term.window);
 
   if (term.window == NULL)
   {

@@ -1,4 +1,5 @@
 #include "TermSP.h"
+#include <SDL2/SDL_image.h>
 
 TERM_State term = {0};
 TERM_Config cfg = {
@@ -18,7 +19,7 @@ TERM_Config cfg = {
 int parseArgs(int argc, char **argv);
 int main(int argc, char *argv[]) {
   #if defined(TEST)
-  cfg.width = 1024;
+  cfg.width = 1280;
   cfg.height = 720;
   #else
   int fh = open("/dev/fb0", O_RDONLY);
@@ -36,12 +37,16 @@ int main(int argc, char *argv[]) {
   if (parseArgs(argc, argv)) return -1;
   if (TERM_Init()) return -1;
   if (KEYB_Init()) return -1;
+  if(IMG_Init(IMG_INIT_PNG)==0) return -100;
+  WHEEL_init();
 
   while (!EV_HandleEvents()) {
     TERM_Update();
     SDL_Delay(1000 / cfg.refreshrate);
   }
 
+  WHEEL_deinit();
+  IMG_Quit();
   TERM_DeinitializeTerminal();
   return 0;
 }

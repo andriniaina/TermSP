@@ -364,7 +364,9 @@ int handleJoyAxis(SDL_Event *ev)
         break;
     case 2: // Left Trigger
         if (ev->jaxis.value > 16000)
-            WHEEL_PressKey();
+            if(!WHEEL_PressKey())
+            if (ev->jaxis.value == 32767)
+            KEYB_SimulateKey(SDLK_LEFT, STATE_TYPED);
         break;
     case 3:
         event.type = SDL_MOUSEMOTION;
@@ -380,7 +382,9 @@ int handleJoyAxis(SDL_Event *ev)
         break;
     case 5: // Right Trigger
         if (ev->jaxis.value > 16000)
-            WHEEL_PressKey();
+            if(!WHEEL_PressKey())
+            if (ev->jaxis.value == 32767)
+            KEYB_SimulateKey(SDLK_RIGHT, STATE_TYPED);
         break;
     }
     return 0;

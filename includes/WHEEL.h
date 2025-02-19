@@ -43,6 +43,8 @@ static SDL_KeyCode vKeyboardChars[] = {
     SDLK_EQUALS,
     SDLK_UNDERSCORE,
 };
+int WHEEL_init();
+int WHEEL_deinit();
 int WHEEL_GetSelectedCharIndexLeft();
 int WHEEL_GetSelectedCharIndexRight();
 void WHEEL_Draw();

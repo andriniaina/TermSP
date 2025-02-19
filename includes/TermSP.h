@@ -40,7 +40,7 @@ typedef struct {
   SDL_Renderer *renderer;
   SDL_Cursor *pointer;
   SDL_Joystick *joystick;
-  SDL_Surface *vscreen;
+  //SDL_Surface *vscreen;
   const Uint8 *keys;
   VTerm *vterm;
   VTermScreen *screen;

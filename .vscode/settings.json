@@ -9,7 +9,9 @@
         "sdl_keycode.h": "c",
         "term.h": "c",
         "WHEEL.h": "c",
-        "keyb.h": "c"
+        "keyb.h": "c",
+        "events.h": "c",
+        "cstdlib": "c"
     },
     "editor.formatOnSaveMode": "modifications",
 }

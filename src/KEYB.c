@@ -33,16 +33,8 @@ char *help =
     "  SELECT:     tab\n"
     "  L2:         left\n"
     "  R2:         right\n"
-    "  MENU:       quit\n\n"
-    "Cheatcheet (tutorial at www.shellscript.sh):\n"
-    "  TAB key         complete path\n"
-    "  UP/DOWN keys    navigate history\n"
-    "  pwd             print current directory\n"
-    "  ls              list files (-l for file size)\n"
-    "  cd <d>          change directory (.. = go up)\n"
-    "  cp <f> <d>      copy files (dest can be dir)\n"
-    "  mv <f> <d>      move files (dest can be dir)\n"
-    "  rm <f>          remove files (use -rf for dir)\n\n";
+    "  MENU+START: quit\n\n"
+    ;
 
 int KEYB_Init() {
     for (int j = 0; j < 6; j++)
