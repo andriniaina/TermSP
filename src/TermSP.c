@@ -1,4 +1,6 @@
 #include "TermSP.h"
+#include "WHEEL.h"
+#include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_image.h>
 
 TERM_State term = {0};
@@ -17,13 +19,15 @@ TERM_Config cfg = {
     .gnuscreen = 0};
 
 int parseArgs(int argc, char **argv);
-int main(int argc, char *argv[]) {
-  #if defined(TEST)
+int main(int argc, char *argv[])
+{
+#if defined(TEST)
   cfg.width = 1280;
   cfg.height = 720;
-  #else
+#else
   int fh = open("/dev/fb0", O_RDONLY);
-  if (fh < 0) {
+  if (fh < 0)
+  {
     fprintf(stderr, "Couldn't open framebuffer.\n");
     return -1;
   }
@@ -32,15 +36,20 @@ int main(int argc, char *argv[]) {
   close(fh);
   cfg.width = vinfo.xres;
   cfg.height = vinfo.yres;
-  #endif
+#endif
 
-  if (parseArgs(argc, argv)) return -1;
-  if (TERM_Init()) return -1;
-  if (KEYB_Init()) return -1;
-  if(IMG_Init(IMG_INIT_PNG)==0) return -100;
+  if (parseArgs(argc, argv))
+    return -1;
+  if (TERM_Init())
+    return -1;
+  if (KEYB_Init())
+    return -1;
+  if (IMG_Init(IMG_INIT_PNG) == 0)
+    return -100;
   WHEEL_init();
 
-  while (!EV_HandleEvents()) {
+  while (!EV_HandleEvents())
+  {
     TERM_Update();
     SDL_Delay(1000 / cfg.refreshrate);
   }
@@ -69,50 +78,60 @@ static const char options[] = "hSkr:c:f:b:s:e:";
 extern char *optarg;
 extern int optind;
 
-int parseArgs(int argc, char **argv) {
+int parseArgs(int argc, char **argv)
+{
   int option;
   int status = 0;
 
-  while ((option = getopt(argc, argv, options)) != -1) {
-    switch (option) {
-      case 'h':
-        puts(help);
-        status = 1;
-        break;
-      case 'S':
-        cfg.gnuscreen = 1;
-        break;
-      case 'k':
-        cfg.virtkb = 1;
-        break;
-      case 'r':
-        if (optarg != NULL) cfg.refreshrate = atoi(optarg);
-        break;
-      case 'c':
-        if (optarg != NULL) cfg.cursorinterval = atoi(optarg);
-        break;
-      case 'f':
-        if (optarg != NULL) cfg.fontpattern = optarg;
-        break;
-      case 'b':
-        if (optarg != NULL) cfg.boldfontpattern = optarg;
-        break;
-      case 's':
-        if (optarg != NULL) cfg.fontsize = atoi(optarg);
-        break;
-      case 'e':
-        if (optarg != NULL) cfg.args = &argv[optind - 1];
-        optind = argc;
-        break;
-      default:
-        status = 1;
-        break;
+  while ((option = getopt(argc, argv, options)) != -1)
+  {
+    switch (option)
+    {
+    case 'h':
+      puts(help);
+      status = 1;
+      break;
+    case 'S':
+      cfg.gnuscreen = 1;
+      break;
+    case 'k':
+      cfg.virtkb = 1;
+      break;
+    case 'r':
+      if (optarg != NULL)
+        cfg.refreshrate = atoi(optarg);
+      break;
+    case 'c':
+      if (optarg != NULL)
+        cfg.cursorinterval = atoi(optarg);
+      break;
+    case 'f':
+      if (optarg != NULL)
+        cfg.fontpattern = optarg;
+      break;
+    case 'b':
+      if (optarg != NULL)
+        cfg.boldfontpattern = optarg;
+      break;
+    case 's':
+      if (optarg != NULL)
+        cfg.fontsize = atoi(optarg);
+      break;
+    case 'e':
+      if (optarg != NULL)
+        cfg.args = &argv[optind - 1];
+      optind = argc;
+      break;
+    default:
+      status = 1;
+      break;
     }
   }
   return status;
 }
 
-void swap(int *a, int *b) {
+void swap(int *a, int *b)
+{
   int tmp = *a;
   *a = *b;
   *b = tmp;

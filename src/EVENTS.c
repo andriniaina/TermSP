@@ -1,5 +1,4 @@
 #include "EVENTS.h"
-#include "WHEEL.h"
 
 extern int childState;
 
@@ -364,7 +363,7 @@ int handleJoyAxis(SDL_Event *ev)
         break;
     case 2: // Left Trigger
         if (ev->jaxis.value > 16000)
-            if(!WHEEL_PressKey())
+            if(!WHEEL_ShiftLayer(-1))
             if (ev->jaxis.value == 32767)
             KEYB_SimulateKey(SDLK_LEFT, STATE_TYPED);
         break;
@@ -382,7 +381,7 @@ int handleJoyAxis(SDL_Event *ev)
         break;
     case 5: // Right Trigger
         if (ev->jaxis.value > 16000)
-            if(!WHEEL_PressKey())
+            if(!WHEEL_ShiftLayer(+1))
             if (ev->jaxis.value == 32767)
             KEYB_SimulateKey(SDLK_RIGHT, STATE_TYPED);
         break;

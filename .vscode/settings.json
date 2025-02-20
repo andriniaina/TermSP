@@ -11,7 +11,10 @@
         "WHEEL.h": "c",
         "keyb.h": "c",
         "events.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "sdl_image.h": "c",
+        "vterm_keycodes.h": "c",
+        "fcntl.h": "c"
     },
     "editor.formatOnSaveMode": "modifications",
 }

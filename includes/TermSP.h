@@ -18,6 +18,7 @@
 #include "SDL_fox.h"
 #include "vterm.h"
 #include "vterm_keycodes.h"
+enum { STATE_TYPED, STATE_UP, STATE_DOWN };
 
 typedef struct {
   char **args;
@@ -89,10 +90,14 @@ void KEYB_Toggle();
 void KEYB_SwitchLocation();
 void KEYB_Shift(int state);
 void KEYB_ToggleMod();
+void KEYB_Cycle_LocationActive();
 
 void KEYB_UpdateModstate(int key, int state);
 void KEYB_SimulateKey(int key, int state);
 int KEYB_VisualOffset(int col, int row);
 int KEYB_NewCol(int visual_offset, int old_row, int new_row);
+
+int WHEEL_PressKey();
+int WHEEL_ShiftLayer(int shift);
 
 void swap(int *a, int *b);

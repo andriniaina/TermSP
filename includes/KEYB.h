@@ -5,7 +5,6 @@
 #define NUM_KEYS 18
 #define KMOD_SYNTHETIC (1 << 13)
 
-enum { STATE_TYPED, STATE_UP, STATE_DOWN };
 
 static int row_length[NUM_ROWS] = {13, 17, 17, 15, 14, 9};
 
@@ -57,11 +56,9 @@ int KEYB_MoveCursor(int dx, int dy);
 void KEYB_ClickKey();
 void KEYB_Toggle();
 void KEYB_SwitchLocation();
-void KEYB_Cycle_LocationActive();
 void KEYB_Shift(int state);
 void KEYB_ToggleMod();
 
 void KEYB_UpdateModstate(int key, int state);
-void KEYB_SimulateKey(int key, int state);
 int KEYB_VisualOffset(int col, int row);
 int KEYB_NewCol(int visual_offset, int old_row, int new_row);

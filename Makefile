@@ -7,7 +7,7 @@ CC := cc
 SYS_INCLUDE_PATH :=  /usr/include
 BUILD_FOLDER = build-x64
 
-#TEST := 1
+TEST := 1
 ifeq ($(TEST), 1)
 	LDLIBS := -Wl,--gc-sections `sdl2-config --libs` -Llibs-x64 -lsdlfox -lvterm -lSDL2_image
 	CFLAGS := -Wall -g `sdl2-config --cflags` -Iincludes/ -ggdb -fsanitize=address,undefined -DTEST
