@@ -26,6 +26,10 @@ endif
 all:
 	mkdir -p ./${BUILD_FOLDER}
 	${CC} ${CFLAGS} ${DEF} ${LDFLAGS} src/*.c -o./${BUILD_FOLDER}/TermSP ${LDLIBS} -DSTDC_HEADERS -ldl -lm -I${SYS_INCLUDE_PATH} --prefix=/userdata/libs
+	rsync -r fonts ./${BUILD_FOLDER}
+	rsync -r res ./${BUILD_FOLDER}
+	rsync -r libs-x64 ./${BUILD_FOLDER}
+# make && LD_LIBRARY_PATH something -b -f
 
 clean:
 	rm -rv ./${BUILD_FOLDER}

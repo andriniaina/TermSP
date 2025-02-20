@@ -33,6 +33,7 @@ typedef struct {
   int rows;
   int columns;
   int gnuscreen;
+  bool WHEEL_enable;
 } TERM_Config;
 extern TERM_Config cfg;
 

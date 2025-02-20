@@ -16,7 +16,9 @@ TERM_Config cfg = {
     .height = 0,
     .rows = 0,
     .columns = 0,
-    .gnuscreen = 0};
+    .gnuscreen = 0,
+    .WHEEL_enable = true,
+};
 
 int parseArgs(int argc, char **argv);
 int main(int argc, char *argv[])
@@ -74,7 +76,7 @@ static const char help[] = {
     "  -s\tSet fontsize\n"
     "  -e\tSet child process executable path\n"};
 
-static const char options[] = "hSkr:c:f:b:s:e:";
+static const char options[] = "WhSkr:c:f:b:s:e:";
 extern char *optarg;
 extern int optind;
 
@@ -104,6 +106,9 @@ int parseArgs(int argc, char **argv)
     case 'c':
       if (optarg != NULL)
         cfg.cursorinterval = atoi(optarg);
+      break;
+    case 'W':
+      cfg.WHEEL_enable = false;
       break;
     case 'f':
       if (optarg != NULL)

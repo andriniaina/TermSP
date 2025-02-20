@@ -219,7 +219,8 @@ void TERM_Update()
     SDL_SetRenderDrawColor(term.renderer, 0, 0, 0, 255);
     SDL_RenderClear(term.renderer);
     renderScreen();
-    WHEEL_Draw();
+    if(cfg.WHEEL_enable)
+      WHEEL_Draw();
     SDL_RenderPresent(term.renderer);
   }
 }
